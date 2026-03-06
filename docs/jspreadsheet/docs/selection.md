@@ -49,12 +49,65 @@ The following methods manage selections in the Jspreadsheet data grid.
  
 ### Initial Settings
 
-| Property                | Description                  |
-|-------------------------|------------------------------|
-| `selectionCopy: boolean`  | Disable the clone selection. |
+| Property                                    | Description                                                                                                                                              |
+|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `selectionCopy: boolean`                    | Disable the clone selection.                                                                                                                             |
+| `selectionCopyDirection: 'both' \| 'vertical' \| 'horizontal' \| 'none'` | Controls the fill-handle drag copy direction. Default: `'both'`. If `selectionCopy = false`, fill-handle interactions remain disabled in all directions. |
 
 
 ## Examples
+
+### Fill-handle Direction Modes
+
+Use `selectionCopyDirection` to control how users can drag the fill-handle to clone values:
+
+- **`'both'` (default)**: allows vertical and horizontal drag copy.
+- **`'vertical'`**: allows only up/down drag copy.
+- **`'horizontal'`**: allows only left/right drag copy.
+- **`'none'`**: disables fill-handle drag copy.
+
+> **Note**
+> `selectionCopyDirection` controls fill-handle drag copy only. When `selectionCopy: false`, fill-handle interactions are disabled regardless of `selectionCopyDirection`.
+
+#### `selectionCopyDirection: 'both'`
+
+```javascript
+jspreadsheet(document.getElementById('spreadsheet-both'), {
+    worksheets: [{ minDimensions: [6, 6] }],
+    selectionCopy: true,
+    selectionCopyDirection: 'both',
+});
+```
+
+#### `selectionCopyDirection: 'vertical'`
+
+```javascript
+jspreadsheet(document.getElementById('spreadsheet-vertical'), {
+    worksheets: [{ minDimensions: [6, 6] }],
+    selectionCopy: true,
+    selectionCopyDirection: 'vertical',
+});
+```
+
+#### `selectionCopyDirection: 'horizontal'`
+
+```javascript
+jspreadsheet(document.getElementById('spreadsheet-horizontal'), {
+    worksheets: [{ minDimensions: [6, 6] }],
+    selectionCopy: true,
+    selectionCopyDirection: 'horizontal',
+});
+```
+
+#### `selectionCopyDirection: 'none'`
+
+```javascript
+jspreadsheet(document.getElementById('spreadsheet-none'), {
+    worksheets: [{ minDimensions: [6, 6] }],
+    selectionCopy: true,
+    selectionCopyDirection: 'none',
+});
+```
 
 ### Programmatically Data Grid Selection
 
