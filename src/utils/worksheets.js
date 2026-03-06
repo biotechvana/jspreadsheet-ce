@@ -2,7 +2,7 @@ import jSuites from 'jsuites';
 
 import libraryBase from './libraryBase.js';
 
-import { parseCSV } from './helpers.js';
+import { getEffectiveCopyDirection, getSelectionCopyCursor, parseCSV } from './helpers.js';
 import {
     createCellHeader,
     deleteColumn,
@@ -200,8 +200,9 @@ const createTable = function () {
     obj.corner.className = 'jss_corner';
     obj.corner.setAttribute('unselectable', 'on');
     obj.corner.setAttribute('onselectstart', 'return false');
+    obj.corner.style.cursor = getSelectionCopyCursor(obj.options);
 
-    if (obj.options.selectionCopy == false) {
+    if (getEffectiveCopyDirection(obj.options) === 'none') {
         obj.corner.style.display = 'none';
     }
 

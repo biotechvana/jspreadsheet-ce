@@ -38,6 +38,38 @@ export const invert = function (o) {
 };
 
 /**
+ * Get the effective direction for the fill handle copy behavior.
+ */
+export const getEffectiveCopyDirection = function (options) {
+    if (options && options.selectionCopy === false) {
+        return 'none';
+    }
+
+    if (options && ['vertical', 'horizontal', 'none'].includes(options.selectionCopyDirection)) {
+        return options.selectionCopyDirection;
+    }
+
+    return 'both';
+};
+
+/**
+ * Get the fill-handle cursor based on the effective copy direction.
+ */
+export const getSelectionCopyCursor = function (options) {
+    const direction = getEffectiveCopyDirection(options);
+
+    if (direction === 'vertical') {
+        return 'ns-resize';
+    } else if (direction === 'horizontal') {
+        return 'ew-resize';
+    } else if (direction === 'both') {
+        return 'crosshair';
+    }
+
+    return '';
+};
+
+/**
  * Get letter based on a number
  *
  * @param {number} columnNumber

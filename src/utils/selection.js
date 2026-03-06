@@ -1,6 +1,6 @@
 import dispatch from './dispatch.js';
 import { getFreezeWidth } from './freeze.js';
-import { getCellNameFromCoords } from './helpers.js';
+import { getCellNameFromCoords, getEffectiveCopyDirection, getSelectionCopyCursor } from './helpers.js';
 import { setHistory } from './history.js';
 import { updateCell, updateFormula, updateFormulaChain, updateTable } from './internal.js';
 import { getColumnNameFromId, getIdFromColumnName } from './internalHelpers.js';
@@ -8,11 +8,14 @@ import { updateToolbar } from './toolbar.js';
 
 export const updateCornerPosition = function () {
     const obj = this;
+    const copyDirection = getEffectiveCopyDirection(obj.options);
+    const isCopyAllowed = copyDirection !== 'none';
 
     // If any selected cells
     if (!obj.highlighted || !obj.highlighted.length) {
         obj.corner.style.top = '-2000px';
         obj.corner.style.left = '-2000px';
+        obj.corner.style.display = 'none';
     } else {
         // Get last cell
         const last = obj.highlighted[obj.highlighted.length - 1].element;
@@ -34,6 +37,7 @@ export const updateCornerPosition = function () {
         // Place the corner in the correct place
         obj.corner.style.top = y + 'px';
         obj.corner.style.left = x + 'px';
+        obj.corner.style.cursor = getSelectionCopyCursor(obj.options);
 
         if (obj.options.freezeColumns) {
             const width = getFreezeWidth.call(obj);
@@ -41,13 +45,17 @@ export const updateCornerPosition = function () {
             if (lastX > obj.options.freezeColumns - 1 && x2 - x1 + w2 < width) {
                 obj.corner.style.display = 'none';
             } else {
-                if (obj.options.selectionCopy != false) {
+                if (isCopyAllowed) {
                     obj.corner.style.display = '';
+                } else {
+                    obj.corner.style.display = 'none';
                 }
             }
         } else {
-            if (obj.options.selectionCopy != false) {
+            if (isCopyAllowed) {
                 obj.corner.style.display = '';
+            } else {
+                obj.corner.style.display = 'none';
             }
         }
     }

@@ -11,7 +11,7 @@ import { loadDown, loadUp } from './lazyLoading.js';
 import { setWidth } from './columns.js';
 import { moveRow, setHeight } from './rows.js';
 import version from './version.js';
-import { getCellNameFromCoords } from './helpers.js';
+import { getCellNameFromCoords, getEffectiveCopyDirection } from './helpers.js';
 
 const getElement = function (element) {
     let jssSection = 0;
@@ -578,6 +578,12 @@ const mouseMoveControls = function (e) {
 const updateCopySelection = function (x3, y3) {
     const obj = this;
 
+    const copyDirection = getEffectiveCopyDirection(obj.options);
+
+    if (copyDirection === 'none') {
+        return;
+    }
+
     // Remove selection
     removeCopySelection.call(obj);
 
@@ -608,7 +614,13 @@ const updateCopySelection = function (x3, y3) {
             uy = parseInt(y1) - 1;
         }
 
-        if (ux - px <= uy - py) {
+        if (copyDirection === 'vertical') {
+            px = parseInt(x1);
+            ux = parseInt(x2);
+        } else if (copyDirection === 'horizontal') {
+            py = parseInt(y1);
+            uy = parseInt(y2);
+        } else if (ux - px <= uy - py) {
             px = parseInt(x1);
             ux = parseInt(x2);
         } else {
@@ -732,6 +744,11 @@ const doubleClickControls = function (e) {
     if (libraryBase.jspreadsheet.current) {
         // Corner action
         if (e.target.classList.contains('jss_corner')) {
+            const copyDirection = getEffectiveCopyDirection(libraryBase.jspreadsheet.current.options);
+            if (copyDirection === 'none' || copyDirection === 'horizontal') {
+                return;
+            }
+
             // Any selected cells
             if (libraryBase.jspreadsheet.current.highlighted.length > 0) {
                 // Copy from this

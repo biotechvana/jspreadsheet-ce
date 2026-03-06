@@ -10,6 +10,9 @@ The clipboard in Jspreadsheet offers a comprehensive set of features that facili
 
 This section details the methods and events you can use to control clipboard behaviour, customize paste actions, and ensure smooth interoperability between different data grids.
 
+> **Note**
+> `selectionCopyDirection` applies to fill-handle drag behaviour only. Clipboard paste follows the existing paste flow and events, such as `onbeforepaste`.
+
 ### Key Features
 
 - **Automatic Formula Updates**: When pasting data containing formulas, Jspreadsheet automatically updates the formulas to match the new data context;

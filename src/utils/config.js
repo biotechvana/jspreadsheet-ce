@@ -1,3 +1,6 @@
+import { getSelectionCopyCursor } from './helpers.js';
+import { updateCornerPosition } from './selection.js';
+
 /**
  * Get table config information
  */
@@ -41,6 +44,13 @@ export const setConfig = function (config, spreadsheetLevel) {
             }
         } else {
             obj.options[key] = config[key];
+
+            if (key === 'selectionCopy' || key === 'selectionCopyDirection') {
+                if (obj.corner) {
+                    obj.corner.style.cursor = getSelectionCopyCursor(obj.options);
+                    updateCornerPosition.call(obj);
+                }
+            }
         }
     });
 };
